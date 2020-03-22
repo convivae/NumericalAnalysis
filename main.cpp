@@ -1,8 +1,10 @@
-#include "Chapter2/LinearEquations.h"
+#include "include/Chapter2/LinearEquations.h"
 
 using namespace chapter2;
 
-int main() {
+int main(int argc, char* argv[], char* env[])
+{
+    printf("argv[0]:%s\n", argv[0]);//全路径
     auto test = LinearEquations<f8>("../in.txt");
 
     // 高斯消元

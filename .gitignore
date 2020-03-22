@@ -6,4 +6,5 @@
 !CMakeLists.txt
 build
 out
+bin
 cmake-build-debug
