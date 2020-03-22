@@ -1,0 +1,9 @@
+.vs
+.vscode
+.idea
+*.pdf
+*.txt
+!CMakeLists.txt
+build
+out
+cmake-build-debug
