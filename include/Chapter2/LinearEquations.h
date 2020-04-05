@@ -36,44 +36,245 @@ namespace chapter2 {
 
         static void print_vec(const std::string &info, const std::string &name, vec_type const &a);
 
+        static void print_vec(const std::string &info, vec_type const &a);
+
         static void draw_dividing_line();
+
+        static bool is_convergent(vec_type const &a, vec_type const &b, f8 epsilon);
+
+        void get_inverse_mat(mat_type const &m, mat_type const &res);
 
     public:
         explicit LinearEquations(std::string filename)
-                : _rdr(std::move(filename)), _initialized(false) {
-        }
+                : _rdr(std::move(filename)), _initialized(false) {}
 
         /**
          * Pivot element 主元 在对矩阵做某种算法时,首先进行的部分元素
          * partial pivoting就是只在当前进行变换的列中选择主元，只需要进行行交换
          * 列主元素 Gauss 消去法
+         * @param show_details
          */
         void Gaussian_elimination_with_partial_pivoting_method(bool show_details = false);
 
         /**
          * 高斯若当消去法
+         * @param show_details
          */
         void Gauss_Jordan_elimination(bool show_details = false);
 
         /**
          * 三角分解法：(A = LU)
          * Doolittle 分解法
+         * @param show_details
          */
         void LU_factorization_Doolittle(bool show_details = false);
 
         /**
          * 三角分解法：(A = LU)
          * Crout 分解法
+         * @param show_details
          */
         void LU_factorization_Crout(bool show_details = false);
 
         /**
          * 三角分解法：(A = LU)
          * 选主元的 Doolittle 分解法
+         * @param show_details
          */
         void LU_factorization_Doolittle_with_partial_pivoting_method(bool show_details = false);
 
+
+        /**
+         * Jacobi 迭代法
+         * @param epsilon 收敛条件
+         * @param max_steps 最大迭代次数
+         * @param show_details 显示每一步的细节
+         */
+        void Jacobi_iteration_method(double epsilon = 1e-5, bool show_details = false, int max_steps = 200);
+
+
+        /**
+         * Gauss Seidel 迭代法
+         * @param epsilon
+         * @param max_steps
+         * @param show_details
+         */
+        void Gauss_Seidel_method(double epsilon = 1e-5, bool show_details = false, int max_steps = 200);
+
+
+        /**
+         * SOR 迭代法
+         * @param omega 松弛因子
+         * @param epsilon
+         * @param show_details
+         * @param max_steps
+         */
+        void Successive_Over_Relaxation_method(double omega = 1.25, double epsilon = 1e-5, bool show_details = false,
+                                               int max_steps = 200);
+
     };
+
+
+    /**
+     * SOR 迭代法
+     * @tparam T
+     * @param omega 松弛因子
+     * @param epsilon
+     * @param show_details
+     * @param max_steps
+     */
+    template<typename T>
+    void LinearEquations<T>::Successive_Over_Relaxation_method(double omega, double epsilon, bool show_details,
+                                                               int max_steps) {
+        std::cout << "SOR 迭代法" << std::endl;
+        if (!_initialized)
+            read_mat();
+
+        i4 n = _dimension;
+        mat_type a(_original_mat);
+        vec_type b(_b_mat);
+        vec_type x0(n), x(n);  //初始值设为全零
+
+        if (show_details)
+            print_vec("start:", x);
+
+        i4 k = max_steps;
+        while (k--) {
+            for (auto i = 0; i < n; ++i) {
+                auto sum = 0.0;
+                for (auto j = 0; j < i; ++j)
+                    sum -= a[i][j] * x[j];
+                for (auto j = i + 1; j < n; ++j)
+                    sum -= a[i][j] * x0[j];
+                sum = (sum + b[i]) / a[i][i];
+                x[i] = omega * sum - (omega - 1) * x0[i];
+            }
+
+            if (show_details)
+                print_vec("next iteration:", x);
+
+            if (is_convergent(x0, x, epsilon))
+                break;
+
+            for (auto i = 0; i < n; ++i)
+                x0[i] = x[i];
+        }
+        if (k <= 0) {
+            std::cout << "已经进行" << max_steps - k << " 次迭代, 无法收敛到 " << epsilon << std::endl;
+            print_vec("最终结果 x：", "x", x);
+        } else {
+            std::cout << "迭代次数为: " << max_steps - k << std::endl;
+            print_vec("计算可得 x：", "x", x);
+        }
+
+        draw_dividing_line();
+    }
+
+    /**
+     * Gauss Seidel 迭代法
+     * @tparam T
+     * @param epsilon
+     * @param max_steps
+     * @param show_details
+     */
+    template<typename T>
+    void LinearEquations<T>::Gauss_Seidel_method(double epsilon, bool show_details, int max_steps) {
+        std::cout << "Gauss Seidel 迭代法" << std::endl;
+        if (!_initialized)
+            read_mat();
+
+        i4 n = _dimension;
+        mat_type a(_original_mat);
+        vec_type b(_b_mat);
+        vec_type x0(n), x(n);  //初始值设为全零
+
+        if (show_details)
+            print_vec("start:", x);
+
+        i4 k = max_steps;
+        while (k--) {
+            for (auto i = 0; i < n; ++i) {
+                auto sum = 0.0;
+                for (auto j = 0; j < i; ++j)
+                    sum += a[i][j] * x[j];
+                for (auto j = i + 1; j < n; ++j)
+                    sum += a[i][j] * x0[j];
+
+                x[i] = (b[i] - sum) / a[i][i];
+            }
+
+            if (show_details)
+                print_vec("next iteration:", x);
+
+            if (is_convergent(x0, x, epsilon))
+                break;
+
+            for (auto i = 0; i < n; ++i)
+                x0[i] = x[i];
+        }
+        if (k <= 0) {
+            std::cout << "已经进行" << max_steps - k << " 次迭代, 无法收敛到 " << epsilon << std::endl;
+            print_vec("最终结果 x：", "x", x);
+        } else {
+            std::cout << "迭代次数为: " << max_steps - k << std::endl;
+            print_vec("计算可得 x：", "x", x);
+        }
+
+        draw_dividing_line();
+    }
+
+    /**
+     * Jacobi 迭代法
+     * @tparam T
+     * @param epsilon
+     * @param max_steps
+     * @param show_details
+     */
+    template<typename T>
+    void LinearEquations<T>::Jacobi_iteration_method(double epsilon, bool show_details, int max_steps) {
+        std::cout << "Jacobi 迭代法" << std::endl;
+        if (!_initialized)
+            read_mat();
+
+        i4 n = _dimension;
+        mat_type a(_original_mat);
+        vec_type b(_b_mat);
+        vec_type x0(n), x(n);  //初始值设为全零
+
+        if (show_details)
+            print_vec("start:", x);
+
+        i4 k = max_steps;
+        while (k--) {
+            for (auto i = 0; i < n; ++i) {
+                auto sum = 0.0;
+                for (auto j = 0; j < n; ++j) {
+                    if (j == i)
+                        continue;
+                    sum += a[i][j] * x0[j];
+                }
+                x[i] = (b[i] - sum) / a[i][i];
+            }
+
+            if (show_details)
+                print_vec("next iteration:", x);
+
+            if (is_convergent(x0, x, epsilon))
+                break;
+
+            for (auto i = 0; i < n; ++i)
+                x0[i] = x[i];
+        }
+        if (k <= 0) {
+            std::cout << "已经进行" << max_steps - k << " 次迭代, 无法收敛到 " << epsilon << std::endl;
+            print_vec("最终结果 x：", "x", x);
+        } else {
+            std::cout << "迭代次数为: " << max_steps - k << std::endl;
+            print_vec("计算可得 x：", "x", x);
+        }
+
+        draw_dividing_line();
+    }
 
     /**
      * 选主元的 Doolittle 分解法
@@ -497,16 +698,108 @@ namespace chapter2 {
     }
 
     template<typename T>
-    void LinearEquations<T>::print_vec(const std::string &info, const std::string &name, const LinearEquations::vec_type &a) {
+    void LinearEquations<T>::print_vec(const std::string &info, const std::string &name,
+                                       const LinearEquations::vec_type &a) {
         std::cout << info << std::endl;
         for (auto i = 0; i < a.size(); ++i)
             std::cout << name << i + 1 << " = " << a[i] << std::endl;
     }
 
     template<typename T>
+    void LinearEquations<T>::print_vec(const std::string &info, const LinearEquations::vec_type &a) {
+        std::cout << info << std::endl;
+        for (auto i : a)
+            std::cout << i << " ";
+        std::cout << std::endl;
+    }
+
+    template<typename T>
     void LinearEquations<T>::draw_dividing_line() {
         std::cout << "------------------------------------------------------" << std::endl;
     }
+
+    template<typename T>
+    bool LinearEquations<T>::is_convergent(const LinearEquations::vec_type &a, const LinearEquations::vec_type &b,
+                                           f8 epsilon) {
+        vec_type x(a.size());
+        for (auto i = 0; i < a.size(); ++i) {
+            auto tmp = a[i] - b[i];
+            x[i] = tmp > 0 ? tmp : -tmp;
+        }
+
+        for (auto i : x) {
+            if (i > epsilon)
+                return false;
+        }
+        return true;
+    }
+
+    template<typename T>
+    void
+    LinearEquations<T>::get_inverse_mat(const LinearEquations::mat_type &mat, const LinearEquations::mat_type &res) {
+        i4 n = mat.size(); //n 行
+        i4 ik; //行号
+
+        // 构造 (a, I)
+        mat_type a(n);
+        for (auto i = 0; i < n; ++i) {
+            a[i].resize(2 * n);
+            for (auto j = 0; j < n; ++j) {
+                a[i][j] = mat[i][j];
+            }
+            for (auto j = n; j < 2 * n; ++j) {
+                a[i][j] = i == j - n ? 1.0 : 0.0;
+            }
+        }
+
+        // 消元
+        for (auto k = 0; k < n; ++k) {
+            auto max_num = a[k][k] > 0 ? a[k][k] : -a[k][k];
+            ik = k;
+
+            // 找到绝对值最大的行号交换
+            for (auto i = k; i < n; ++i) {
+                auto tmp = a[i][k] > 0 ? a[i][k] : -a[i][k];
+                if (tmp > max_num) {
+                    max_num = tmp;
+                    ik = i;
+                }
+            }
+            if (ik != k) {
+                a[k].swap(a[ik]);
+            }
+
+            // 令 a[k][k]为1
+            for (auto i = 2 * n - 1; i >= k; --i)
+                a[k][i] /= a[k][k];
+
+            //消去其下方
+            for (auto i = k + 1; i < n; ++i) {
+                auto m = a[i][k];
+                for (auto j = k; j < 2 * n; ++j) {
+                    a[i][j] -= m * a[k][j];
+                }
+            }
+
+            //消去其上方
+            for (auto i = k - 1; i >= 0; --i) {
+                auto m = a[i][k];
+                for (auto j = k; j < 2 * n; ++j) {
+                    a[i][j] -= m * a[k][j];
+                }
+            }
+        }
+
+        // 得到逆矩阵
+        res.resize(n);
+        for (auto i = 0; i < n; ++i) {
+            res[i].resize(n);
+            for (auto j = 0; j < n; ++j) {
+                res[i][j] = a[i][j + n];
+            }
+        }
+    }
+
 }
 
 #endif //NUMERICALANALYSIS_LINEAREQUATIONS_H

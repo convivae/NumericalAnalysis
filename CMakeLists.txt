@@ -8,4 +8,6 @@ project(NumericalAnalysis)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(NumericalAnalysis main.cpp include/Chapter2/LinearEquations.h include/Type/Type.h)
+add_executable(NumericalAnalysis main.cpp
+        include/Chapter2/LinearEquations.h
+        include/Type/Type.h include/Chapter3/MatrixEigenvaluesAndEigenvectors.cpp include/Chapter3/MatrixEigenvaluesAndEigenvectors.h)
