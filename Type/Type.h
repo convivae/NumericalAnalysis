@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace chapter2 {
+namespace my_type {
 
 #define U1_MAX UINT8_MAX
 #define U2_MAX UINT16_MAX

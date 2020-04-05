@@ -1,9 +1,9 @@
 #include "Chapter2/LinearEquations.h"
 
+using namespace my_type;
 using namespace chapter2;
 
-int main(int argc, char* argv[], char* env[])
-{
+int main(int argc, char *argv[], char *env[]) {
     auto test = LinearEquations<f8>("../in.txt");
 
     // 高斯消元

@@ -16,6 +16,8 @@
 
 #include "../Type/Type.h"
 
+using namespace my_type;
+
 namespace chapter2 {
 
     template<typename T>
