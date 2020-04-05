@@ -7,8 +7,8 @@ int main(int argc, char* argv[], char* env[])
     auto test = LinearEquations<f8>("../in.txt");
 
     // 高斯消元
-    test.Gaussian_elimination_with_partial_pivoting_method(false);
-    test.Gauss_Jordan_elimination(false);
+    test.Gaussian_elimination_with_partial_pivoting_method();
+    test.Gauss_Jordan_elimination();
 
     // 三角分解法
     test.LU_factorization_Doolittle(false);
