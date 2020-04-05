@@ -1,7 +1,6 @@
 #include "Chapter2/LinearEquations.h"
 
-using namespace my_type;
-using namespace chapter2;
+using namespace convivae;
 
 int main(int argc, char *argv[], char *env[]) {
     auto test = LinearEquations<f8>("../in.txt");

@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace my_type {
+namespace convivae {
 
 #define U1_MAX UINT8_MAX
 #define U2_MAX UINT16_MAX

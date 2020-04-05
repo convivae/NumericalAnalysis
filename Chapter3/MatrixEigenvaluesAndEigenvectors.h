@@ -7,14 +7,15 @@
 #ifndef NUMERICALANALYSIS_MATRIXEIGENVALUESANDEIGENVECTORS_H
 #define NUMERICALANALYSIS_MATRIXEIGENVALUESANDEIGENVECTORS_H
 
+namespace convivae {
+    class MatrixEigenvaluesAndEigenvectors {
+    private:
 
-class MatrixEigenvaluesAndEigenvectors {
-private:
-
-public:
+    public:
 
 
-};
+    };
+}
 
 
 #endif //NUMERICALANALYSIS_MATRIXEIGENVALUESANDEIGENVECTORS_H

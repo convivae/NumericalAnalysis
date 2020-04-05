@@ -16,9 +16,7 @@
 
 #include "../Type/Type.h"
 
-using namespace my_type;
-
-namespace chapter2 {
+namespace convivae {
 
     template<typename T>
     class LinearEquations {
