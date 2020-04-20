@@ -10,6 +10,12 @@
 
 namespace convivae {
 
+    //范数
+    enum norm {
+        two_norm,
+        infinite_norm
+    };
+
 #define U1_MAX UINT8_MAX
 #define U2_MAX UINT16_MAX
 #define U4_MAX UINT32_MAX

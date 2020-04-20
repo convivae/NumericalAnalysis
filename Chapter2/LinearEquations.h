@@ -42,8 +42,6 @@ namespace convivae {
 
         static bool is_convergent(vec_type const &a, vec_type const &b, f8 epsilon);
 
-        void get_inverse_mat(mat_type const &m, mat_type const &res);
-
     public:
         explicit LinearEquations(std::string filename)
                 : _rdr(std::move(filename)), _initialized(false) {}
@@ -733,73 +731,6 @@ namespace convivae {
         }
         return true;
     }
-
-    template<typename T>
-    void
-    LinearEquations<T>::get_inverse_mat(const LinearEquations::mat_type &mat, const LinearEquations::mat_type &res) {
-        i4 n = mat.size(); //n 行
-        i4 ik; //行号
-
-        // 构造 (a, I)
-        mat_type a(n);
-        for (auto i = 0; i < n; ++i) {
-            a[i].resize(2 * n);
-            for (auto j = 0; j < n; ++j) {
-                a[i][j] = mat[i][j];
-            }
-            for (auto j = n; j < 2 * n; ++j) {
-                a[i][j] = i == j - n ? 1.0 : 0.0;
-            }
-        }
-
-        // 消元
-        for (auto k = 0; k < n; ++k) {
-            auto max_num = a[k][k] > 0 ? a[k][k] : -a[k][k];
-            ik = k;
-
-            // 找到绝对值最大的行号交换
-            for (auto i = k; i < n; ++i) {
-                auto tmp = a[i][k] > 0 ? a[i][k] : -a[i][k];
-                if (tmp > max_num) {
-                    max_num = tmp;
-                    ik = i;
-                }
-            }
-            if (ik != k) {
-                a[k].swap(a[ik]);
-            }
-
-            // 令 a[k][k]为1
-            for (auto i = 2 * n - 1; i >= k; --i)
-                a[k][i] /= a[k][k];
-
-            //消去其下方
-            for (auto i = k + 1; i < n; ++i) {
-                auto m = a[i][k];
-                for (auto j = k; j < 2 * n; ++j) {
-                    a[i][j] -= m * a[k][j];
-                }
-            }
-
-            //消去其上方
-            for (auto i = k - 1; i >= 0; --i) {
-                auto m = a[i][k];
-                for (auto j = k; j < 2 * n; ++j) {
-                    a[i][j] -= m * a[k][j];
-                }
-            }
-        }
-
-        // 得到逆矩阵
-        res.resize(n);
-        for (auto i = 0; i < n; ++i) {
-            res[i].resize(n);
-            for (auto j = 0; j < n; ++j) {
-                res[i][j] = a[i][j + n];
-            }
-        }
-    }
-
 }
 
 #endif //NUMERICALANALYSIS_LINEAREQUATIONS_H
