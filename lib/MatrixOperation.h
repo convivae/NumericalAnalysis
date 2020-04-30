@@ -20,37 +20,28 @@ namespace convivae {
         typedef std::vector<T> vec_type;
     public:
         /**
-         * 矩阵乘以矩阵
+         * 矩阵加法
+         * @param a
+         * @param b
+         * @return
+         */
+        static mat_type matrix_add(mat_type const &a, mat_type const &b);
+
+        /**
+         * 矩阵减法
+         * @param a
+         * @param b
+         * @return
+         */
+        static mat_type matrix_sub(mat_type const &a, mat_type const &b);
+
+        /**
+         * 矩阵乘法
          * @param a
          * @param b
          * @return a*b
          */
         static mat_type matrix_multiply(mat_type const &a, mat_type const &b);
-
-        /**
-         * 矩阵数乘
-         * @param a
-         * @param b
-         * @return  矩阵
-         */
-        static mat_type matrix_multiply(mat_type const &a, f8 const &b);
-
-        /**
-         * 矩阵乘以列向量
-         * @param a
-         * @param b
-         * @return
-         */
-        static vec_type matrix_multiply(mat_type const &a, vec_type const &b);
-
-        /**
-         * 行向量乘以列向量
-         * @param a
-         * @param b
-         * @return 一个数
-         */
-        static T matrix_multiply(vec_type const &a, vec_type const &b);
-
 
         /**
          * 矩阵除法
@@ -61,12 +52,35 @@ namespace convivae {
         static mat_type matrix_div(mat_type const &a, f8 const &b);
 
         /**
+         * 矩阵数乘
+         * @param a
+         * @param b
+         * @return  矩阵
+         */
+        static mat_type matrix_multiply(mat_type const &a, f8 const &b);
+
+        /**
+         * 行向量乘以列向量
+         * @param a
+         * @param b
+         * @return 一个数
+         */
+        static T matrix_multiply(vec_type const &a, mat_type const &b);
+
+        /**
+         * 列向量乘以行向量
+         * @param a
+         * @param b
+         * @return 矩阵
+         */
+        static mat_type matrix_multiply(mat_type const &a, vec_type const &b);
+
+        /**
          * 矩阵求逆
          * @param m
          * @return
          */
         static mat_type matrix_inverse(mat_type const &m);
-
 
         /**
          * 矩阵转置
@@ -74,27 +88,55 @@ namespace convivae {
          * @return
          */
         static mat_type matrix_transposition(mat_type const &m);
+
+        /**
+         * 矩阵转置
+         * @param m 行向量
+         * @return 列向量（返回一个矩阵，只有一列）
+         */
+        static mat_type matrix_transposition(vec_type const &m);
+
+        /**
+         * 是否是对称矩阵
+         * @param a
+         * @return
+         */
+        static bool is_symmetric_matrix(mat_type a);
+
+        /**
+         * 生成单位矩阵
+         * @param n
+         * @return
+         */
+        static mat_type identity_matrix(int n);
     };
 
     template<typename T>
-    inline std::vector<T> MatrixOperation<T>::matrix_multiply(mat_type const &a, vec_type const &b) {
-        if (a[0].size() != b.size()) {
-            std::cerr << "This matrix and vector can't multiply." << std::endl;
-            exit(-1);
-        }
-
-        vec_type res(a.size());
-        for (auto i = 0; i < a.size(); ++i) {
-            for (auto j = 0; j < a[i].size(); ++j) {
-                res[i] += a[i][j] * b[j];
+    bool MatrixOperation<T>::is_symmetric_matrix(MatrixOperation::mat_type a) {
+        auto n = a.size();
+        for (auto i = 0; i < n - 1; ++i) {
+            for (auto j = i + 1; j < n; ++j) {
+                if (a[i][j] != a[j][i])
+                    return false;
             }
         }
+        return true;
+    }
 
+    template<typename T>
+    inline std::vector<std::vector<T>> MatrixOperation<T>::identity_matrix(int n) {
+        mat_type res(n);
+        for (auto &i : res) {
+            i.resize(n);
+        }
+        for (auto i = 0; i < n; ++i) {
+            res[i][i] = 1.0;
+        }
         return res;
     }
 
     template<typename T>
-    inline T MatrixOperation<T>::matrix_multiply(vec_type const &a, vec_type const &b) {
+    inline T MatrixOperation<T>::matrix_multiply(vec_type const &a, mat_type const &b) {
         if (a.size() != b.size()) {
             std::cerr << "These two vectors can't multiply." << std::endl;
             exit(-1);
@@ -102,7 +144,28 @@ namespace convivae {
 
         T res(0);
         for (auto i = 0; i < a.size(); ++i)
-            res += a[i] * b[i];
+            res += a[i] * b[i][0];
+        return res;
+    }
+
+    template<typename T>
+    inline std::vector<std::vector<T>> MatrixOperation<T>::matrix_multiply(mat_type const &a, vec_type const &b) {
+        if (a[0].size() != 1) {
+            std::cerr << "This matrix and vector can't multiply." << std::endl;
+            exit(-1);
+        }
+
+        int row = a.size(), column = b.size();
+
+        mat_type res(row);
+        for (auto &i : res)
+            i.resize(column);
+
+        for (auto i = 0; i < row; ++i) {
+            for (auto j = 0; j < column; ++j) {
+                res[i][j] += a[i][0] * b[j];
+            }
+        }
         return res;
     }
 
@@ -114,7 +177,7 @@ namespace convivae {
             exit(-1);
         }
         mat_type res(row);
-        for (auto i : res)
+        for (auto &i : res)
             i.resize(column);
 
         for (auto i = 0; i < row; ++i) {
@@ -134,6 +197,28 @@ namespace convivae {
         for (auto i = 0; i < res.size(); ++i) {
             for (auto j = 0; j < res[i].size(); ++j) {
                 res[i][j] *= b;
+            }
+        }
+        return res;
+    }
+
+    template<typename T>
+    inline std::vector<std::vector<T>> MatrixOperation<T>::matrix_add(mat_type const &a, mat_type const &b) {
+        mat_type res(a);
+        for (auto i = 0; i < res.size(); ++i) {
+            for (auto j = 0; j < res[i].size(); ++j) {
+                res[i][j] += b[i][j];
+            }
+        }
+        return res;
+    }
+
+    template<typename T>
+    inline std::vector<std::vector<T>> MatrixOperation<T>::matrix_sub(mat_type const &a, mat_type const &b) {
+        mat_type res(a);
+        for (auto i = 0; i < res.size(); ++i) {
+            for (auto j = 0; j < res[i].size(); ++j) {
+                res[i][j] -= b[i][j];
             }
         }
         return res;
@@ -226,7 +311,7 @@ namespace convivae {
     template<typename T>
     inline std::vector<std::vector<T>> MatrixOperation<T>::matrix_transposition(mat_type const &m) {
         mat_type res(m[0].size());
-        for (auto i : res) {
+        for (auto &i : res) {
             i.resize(m.size());
         }
 
@@ -239,7 +324,19 @@ namespace convivae {
         return res;
     }
 
+    template<typename T>
+    inline std::vector<std::vector<T>> MatrixOperation<T>::matrix_transposition(vec_type const &m) {
+        mat_type res(m.size());
+        for (auto &i : res) {
+            i.resize(1);
+        }
 
+        for (auto i = 0; i < res.size(); ++i) {
+            res[i][0] = m[i];
+        }
+
+        return res;
+    }
 }
 
 

@@ -36,6 +36,10 @@ namespace convivae {
     using f8 = double;
 
     using double_t = f8;
+
+
+    typedef std::vector<std::vector<f8>> f8_mat_type;
+    typedef std::vector<f8> f8_vec_type;
 }
 
 #endif //NUMERICALANALYSIS_TYPE_H

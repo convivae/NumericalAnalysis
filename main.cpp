@@ -28,9 +28,19 @@ int main(int argc, char *argv[], char *env[]) {
      * 第三章 求特征值和特征向量
      */
     auto test03 = MatrixEigenvaluesAndEigenvectors("../3.txt");
-    test03.power_method(1e-5);
-    test03.inverse_power_method(1e-5, false, norm::two_norm);
-    test03.inverse_power_method(1.2679, 1e-5, false, norm::infinite_norm);
 
+    // 幂法与反幂法
+    std::vector<std::vector<f8>> A, Q, R;
+    test03.QR_decomposition_Householder(A, Q, R, true);
+
+    test03.power_method(1e-5);
+    test03.inverse_power_method(norm::two_norm, 1e-5, false);
+    test03.inverse_power_method(20.9681);
+    test03.Jacobi_method(1e-5, false);
+
+    test03.QR_method_normal(1e-5, false);
+    test03.QR_method_Transformed_Rotational_Matrix(1e-5, false);
+    test03.QR_method_with_one_step_shifted(1e-5, false);
+    test03.QR_method_with_two_steps_shifted(1e-5, false);
 
 }
