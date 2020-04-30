@@ -2,7 +2,6 @@
 .vscode
 .idea
 *.pdf
-*.txt
 !CMakeLists.txt
 build
 out
