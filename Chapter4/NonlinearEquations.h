@@ -103,7 +103,7 @@ namespace convivae {
 
         /**
          * 非线性方程组的简单迭代法（仅针对两个未知数）
-         * 完整写法比较麻烦，这里只是针对课后练习题的算法
+         * 完整写法比较麻烦，这里只是针对课后练习题的算法（P93 T10）
          * @param fun1
          * @param fun2
          * @param x1_0 x1 的初始值
@@ -117,6 +117,7 @@ namespace convivae {
 
         /**
          * 非线性方程组的 Newton 迭代法（仅针对两个未知数）
+         * 完整写法比较麻烦，这里只是针对课后练习题的算法（P93 T11）
          * @param fun1
          * @param fun2
          * @param x1_0
