@@ -222,3 +222,80 @@ void convivae::NonlinearEquations::secant_with_single_point_iteration_method(con
     std::cout << "结果: x = " << xk << std::endl;
     draw_dividing_line();
 }
+
+void convivae::NonlinearEquations::simple_iteration_equations_method(convivae::NonlinearEquations::ppFun fun1,
+                                                                     convivae::NonlinearEquations::ppFun fun2,
+                                                                     double x1_0, double x2_0, double eta,
+                                                                     bool show_details, int max_steps) const {
+    std::cout << "非线性方程组的简单迭代法" << std::endl;
+    auto k = 0;
+
+    if (show_details)
+        std::cout << "x1_0 = " << x1_0 << ", x2_0 = " << x2_0 << std::endl;
+
+    auto x1 = 0.0, x2 = 0.0;
+
+    while (k++ < max_steps) {
+        x1 = fun1(x1_0, x2_0);
+        x2 = fun2(x1_0, x2_0);
+
+        if (show_details)
+            std::cout << "x1_" << k << " = " << x1 << ", x2_" << k << " = " << x2 << std::endl;
+
+        if (fabs(x1 - x1_0) / fabs(x1) <= eta && fabs(x2 - x2_0) / fabs(x2) <= eta) {
+            if (show_details) {
+                std::cout << "|x1_" << k << " - x1_" << k - 1 << "| / |x1_" << k << "| = " << fabs(x1 - x1_0) / fabs(x1)
+                          << " < " << eta << std::endl;
+                std::cout << "|x2_" << k << " - x2_" << k - 1 << "| / |x2_" << k << "| = " << fabs(x2 - x2_0) / fabs(x2)
+                          << " < " << eta << std::endl;
+                break;
+            }
+        }
+
+        x1_0 = x1;
+        x2_0 = x2;
+    }
+
+    std::cout << "迭代次数: " << k << std::endl;
+    std::cout << "结果: x1 = " << x1 << ", x2 = " << x2 << std::endl;
+    draw_dividing_line();
+
+}
+
+void convivae::NonlinearEquations::Newton_iteration_equations_method(convivae::NonlinearEquations::ppFun fun1,
+                                                                     convivae::NonlinearEquations::ppFun fun2,
+                                                                     double x1_0, double x2_0, double eta,
+                                                                     bool show_details, int max_steps) const {
+    std::cout << "非线性方程组的 Newton 迭代法" << std::endl;
+    auto k = 0;
+
+    if (show_details)
+        std::cout << "x1_0 = " << x1_0 << ", x2_0 = " << x2_0 << std::endl;
+
+    auto x1 = 0.0, x2 = 0.0;
+
+    while (k++ < max_steps) {
+        x1 = fun1(x1_0, x2_0);
+        x2 = fun2(x1_0, x2_0);
+
+        if (show_details)
+            std::cout << "x1_" << k << " = " << x1 << ", x2_" << k << " = " << x2 << std::endl;
+
+        if (fabs(x1 - x1_0) / fabs(x1) <= eta && fabs(x2 - x2_0) / fabs(x2) <= eta) {
+            if (show_details) {
+                std::cout << "|x1_" << k << " - x1_" << k - 1 << "| / |x1_" << k << "| = " << fabs(x1 - x1_0) / fabs(x1)
+                          << " < " << eta << std::endl;
+                std::cout << "|x2_" << k << " - x2_" << k - 1 << "| / |x2_" << k << "| = " << fabs(x2 - x2_0) / fabs(x2)
+                          << " < " << eta << std::endl;
+                break;
+            }
+        }
+
+        x1_0 = x1;
+        x2_0 = x2;
+    }
+
+    std::cout << "迭代次数: " << k << std::endl;
+    std::cout << "结果: x1 = " << x1 << ", x2 = " << x2 << std::endl;
+    draw_dividing_line();
+}

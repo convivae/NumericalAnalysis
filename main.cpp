@@ -35,6 +35,38 @@ double fun_secant(double x) {
     return x + sin(x) - 1;
 }
 
+//方程组的简单迭代法
+double fun_equations_simple1(double x, double y) {
+    return 1.2 - pow(_e, -2 * y);
+}
+
+double fun_equations_simple2(double x, double y) {
+    return 0.5 * (1.97 - pow(_e, -x));
+}
+
+//方程组的 Newton 迭代法
+double fun_equations_Newton1(double x, double y) {
+    auto a = 1 - cos(x + y);
+    auto b = -cos(x + y);
+    auto c = -sin(x + y);
+    auto d = 1 - sin(x + y);
+    auto e = x - sin(x + y) - 1.2;
+    auto f = y + cos(x + y) - 0.5;
+
+    return x + (f / d - e / b) / (a / b - c / d);
+}
+
+double fun_equations_Newton2(double x, double y) {
+    auto a = 1 - cos(x + y);
+    auto b = -cos(x + y);
+    auto c = -sin(x + y);
+    auto d = 1 - sin(x + y);
+    auto e = x - sin(x + y) - 1.2;
+    auto f = y + cos(x + y) - 0.5;
+
+    return y + (f / c - e / a) / (b / a - d / c);
+}
+
 int main(int argc, char *argv[], char *env[]) {
     /**
      * 第二章 解线性方程组
@@ -87,4 +119,6 @@ int main(int argc, char *argv[], char *env[]) {
     test04->Newton_iteration_method(fun_Newton, fun_Newton_1, 1e-6, 0.6, false, true);
     test04->secant_iteration_method(fun_secant, 0, 1.6, 1e-6, false);
     test04->secant_with_single_point_iteration_method(fun_secant, 0, 1.6, 1e-6, false);
+    test04->simple_iteration_equations_method(fun_equations_simple1, fun_equations_simple2, 1, 1, 5e-4, true);
+    test04->Newton_iteration_equations_method(fun_equations_Newton1, fun_equations_Newton2, 1, 1, 1e-4, true,100);
 }
