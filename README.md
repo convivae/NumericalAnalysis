@@ -56,6 +56,7 @@
 * [x] 简单迭代法
 * [x] Steffensen 迭代法
 * [x] Newton 法
+  * [x] Newton 下山法
 * [x] 割线法
 * [x] 单点割线法
 
