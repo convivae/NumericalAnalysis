@@ -7,11 +7,15 @@ project(NumericalAnalysis)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(NumericalAnalysis main.cpp
+add_executable(NumericalAnalysis
+        main.cpp
         Type/Type.h
         Chapter2/LinearEquations.h
         Chapter3/MatrixEigenvaluesAndEigenvectors.cpp
         Chapter3/MatrixEigenvaluesAndEigenvectors.h
-        lib/MatrixOperation.h Chapter4/NonlinearEquations.cpp
+        lib/MatrixOperation.h
+        Chapter4/NonlinearEquations.cpp
         Chapter4/NonlinearEquations.h
-        )
+        lib/Polymerization.h
+        lib/Polymerization.cpp
+        lib/fun.h Chapter5/InterpolationAndApproximation.cpp Chapter5/InterpolationAndApproximation.h)

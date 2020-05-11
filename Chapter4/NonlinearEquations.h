@@ -7,11 +7,11 @@
 #ifndef NUMERICALANALYSIS_NONLINEAREQUATIONS_H
 #define NUMERICALANALYSIS_NONLINEAREQUATIONS_H
 
-#include "../Type/Type.h"
 #include <iostream>
 #include <vector>
-#include <cmath>
 #include <iomanip>
+
+#include "../Type/Type.h"
 
 namespace convivae {
     class NonlinearEquations {

@@ -1,0 +1,16 @@
+//
+// 数值分析
+// 第五章 插值与逼近
+// Created by convi on 2020/5/12.
+//
+
+#ifndef NUMERICALANALYSIS_INTERPOLATIONANDAPPROXIMATION_H
+#define NUMERICALANALYSIS_INTERPOLATIONANDAPPROXIMATION_H
+
+
+class InterpolationAndApproximation {
+
+};
+
+
+#endif //NUMERICALANALYSIS_INTERPOLATIONANDAPPROXIMATION_H

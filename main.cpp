@@ -1,71 +1,10 @@
 #include "Chapter2/LinearEquations.h"
 #include "Chapter3/MatrixEigenvaluesAndEigenvectors.h"
+#include "lib/fun.h"
 #include "Chapter4/NonlinearEquations.h"
 
-constexpr auto _e = 2.718281828459;
-
+using namespace std;
 using namespace convivae;
-
-//二分法的迭代函数
-double fun_dichotomy(double x) {
-    return x + sin(x) - 1;
-}
-
-//简单迭代法的迭代函数
-double fun_simple(double x) {
-    return 2 * acos(sqrt((pow(_e, -x) + 1) / 2));
-}
-
-//Steffensen 法迭代函数
-double fun_Steffensen(double x) {
-    return (2 - pow(_e, x)) / 10;
-}
-
-//Newton 法迭代函数
-double fun_Newton(double x) {
-    return x + sin(x) - 1;
-}
-
-double fun_Newton_1(double x) {
-    return 1 + cos(x);
-}
-
-// 割线法
-double fun_secant(double x) {
-    return x + sin(x) - 1;
-}
-
-//方程组的简单迭代法
-double fun_equations_simple1(double x, double y) {
-    return 1.2 - pow(_e, -2 * y);
-}
-
-double fun_equations_simple2(double x, double y) {
-    return 0.5 * (1.97 - pow(_e, -x));
-}
-
-//方程组的 Newton 迭代法
-double fun_equations_Newton1(double x, double y) {
-    auto a = 1 - cos(x + y);
-    auto b = -cos(x + y);
-    auto c = -sin(x + y);
-    auto d = 1 - sin(x + y);
-    auto e = x - sin(x + y) - 1.2;
-    auto f = y + cos(x + y) - 0.5;
-
-    return x + (f / d - e / b) / (a / b - c / d);
-}
-
-double fun_equations_Newton2(double x, double y) {
-    auto a = 1 - cos(x + y);
-    auto b = -cos(x + y);
-    auto c = -sin(x + y);
-    auto d = 1 - sin(x + y);
-    auto e = x - sin(x + y) - 1.2;
-    auto f = y + cos(x + y) - 0.5;
-
-    return y + (f / c - e / a) / (b / a - d / c);
-}
 
 int main(int argc, char *argv[], char *env[]) {
     /**
@@ -92,7 +31,7 @@ int main(int argc, char *argv[], char *env[]) {
      */
     auto test03 = MatrixEigenvaluesAndEigenvectors("../3.txt");
     // QR 分解
-    std::vector<std::vector<f8>> A, Q, R;
+    vector<vector<f8>> A, Q, R;
     test03.QR_decomposition_Householder(A, Q, R, true);
 
     // 幂法与反幂法
@@ -113,7 +52,7 @@ int main(int argc, char *argv[], char *env[]) {
      * 第四章 非线性方程与非线性方程组的迭代解法
      */
     auto *test04 = new NonlinearEquations();
-    //std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(9);
+    //cout << setiosflags(ios::fixed) << setprecision(9);
 
     //以下均为传递函数指针
     //非线性方程的迭代解法
@@ -127,4 +66,8 @@ int main(int argc, char *argv[], char *env[]) {
     //方程组的迭代解法
     test04->simple_iteration_equations_method(fun_equations_simple1, fun_equations_simple2, 1, 1, 5e-4, false);
     test04->Newton_iteration_equations_method(fun_equations_Newton1, fun_equations_Newton2, 1, 1, 1e-4, false);
+
+    /**
+     * 第五章
+     */
 }

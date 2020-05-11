@@ -1,4 +1,5 @@
 //
+// 矩阵
 // Created by convi on 2020/4/13.
 //
 
@@ -7,7 +8,6 @@
 
 
 #include <vector>
-#include <cmath>
 #include <iostream>
 #include "../Type/Type.h"
 
