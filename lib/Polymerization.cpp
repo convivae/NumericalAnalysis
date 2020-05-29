@@ -4,7 +4,7 @@
 
 #include "Polymerization.h"
 
-void convivae::Polymerization::read_from_string(const string &s) {
+void Polymerization::read_from_string(const string &s) {
     std::vector<string> poly;
 
     size_t begin = 0;
@@ -68,27 +68,26 @@ void convivae::Polymerization::read_from_string(const string &s) {
 }
 
 
-string convivae::Polymerization::to_string(const poly_type &p) {
+string Polymerization::to_string() {
     string s;
     stringstream ss;
-    for (const auto i : p) {
-        if (i.second > 0)
+    for (auto i = this->_polynome.rbegin(); i != this->_polynome.rend(); ++i) {
+        if ((*i).second > 0)
             ss << '+';
-        ss << i.second << "x^" << i.first;
+        ss << (*i).second << "x^" << (*i).first;
     }
 
     ss >> s;
     return s;
 }
 
-convivae::Polymerization convivae::Polymerization::operator+(const Polymerization &p) {
+Polymerization Polymerization::operator+(const Polymerization &p) {
     poly_type res;
     for (auto i : this->_polynome) {
-        auto j = p._polynome.find(i.first);
-        if (j == p._polynome.end()) {
+        if (p._polynome.find(i.first) == p._polynome.end()) {
             res.insert(i);
         } else {
-            res.insert(std::make_pair(i.first, i.second + j->second));
+            res.insert(std::make_pair(i.first, i.second + p._polynome.at(i.first)));
         }
     }
     for (auto i : p._polynome) {
@@ -99,14 +98,24 @@ convivae::Polymerization convivae::Polymerization::operator+(const Polymerizatio
     return Polymerization(res);
 }
 
-convivae::Polymerization convivae::Polymerization::operator-(const Polymerization &p) {
+Polymerization Polymerization::operator+(double n) {
+    if (this->_polynome.find(0) == this->_polynome.end()) {
+        this->_polynome.insert(make_pair(0, n));
+    } else {
+        this->_polynome[0] += n;
+    }
+
+    return Polymerization(this->_polynome);
+}
+
+Polymerization Polymerization::operator-(const Polymerization &p) {
     poly_type res;
     for (auto i : this->_polynome) {
         auto j = p._polynome.find(i.first);
         if (j == p._polynome.end()) {
             res.insert(i);
         } else {
-            res.insert(std::make_pair(i.first, i.second - j->second));
+            res.insert(std::make_pair(i.first, i.second - p._polynome.at(i.first)));
         }
     }
     for (auto i : p._polynome) {
@@ -117,7 +126,17 @@ convivae::Polymerization convivae::Polymerization::operator-(const Polymerizatio
     return Polymerization(res);
 }
 
-convivae::Polymerization convivae::Polymerization::operator*(const Polymerization &p) {
+Polymerization Polymerization::operator-(const double n) {
+    if (this->_polynome.find(0) == this->_polynome.end()) {
+        this->_polynome.insert(make_pair(0, -n));
+    } else {
+        this->_polynome[0] -= n;
+    }
+
+    return Polymerization(this->_polynome);
+}
+
+Polymerization Polymerization::operator*(const Polymerization &p) {
     poly_type res;
     for (auto i : this->_polynome) {
         for (auto j : p._polynome) {
@@ -133,7 +152,74 @@ convivae::Polymerization convivae::Polymerization::operator*(const Polymerizatio
     return Polymerization(res);
 }
 
-convivae::Polymerization convivae::Polymerization::derivative() {
+Polymerization Polymerization::operator*(const double n) {
+    poly_type res;
+    for (auto i : this->_polynome) {
+        res.insert(make_pair(i.first, i.second * n));
+    }
+    return Polymerization(res);
+}
+
+Polymerization &Polymerization::operator=(const Polymerization &p)
+= default;
+
+Polymerization &Polymerization::operator+=(const Polymerization &p) {
+    for (auto i : p._polynome) {
+        auto j = this->_polynome.find(i.first);
+        if (j == this->_polynome.end()) {
+            this->_polynome.insert(i);
+        } else {
+            this->_polynome[i.first] += p._polynome.at(i.first);
+        }
+    }
+
+    return *this;
+}
+
+Polymerization &Polymerization::operator-=(const Polymerization &p) {
+    for (auto i : p._polynome) {
+        auto j = this->_polynome.find(i.first);
+        if (j == this->_polynome.end()) {
+            this->_polynome.insert(make_pair(i.first, -i.second));
+        } else {
+            this->_polynome[i.first] -= p._polynome.at(i.first);
+        }
+    }
+
+    return *this;
+}
+
+Polymerization &Polymerization::operator*=(const Polymerization &p) {
+    poly_type res;
+    for (auto i : this->_polynome) {
+        for (auto j : p._polynome) {
+            auto coefficient = i.second * j.second;
+            auto power = i.first + j.first;
+            if (!res.empty() && res.find(power) != res.end())
+                res[power] += coefficient;
+            else
+                res.insert(std::make_pair(power, coefficient));
+        }
+    }
+
+    this->_polynome = res;
+    return *this;
+}
+
+bool Polymerization::operator==(const Polymerization &p) {
+    if (this->_polynome.size() == p._polynome.size()) {
+        for (auto i : this->_polynome) {
+            if (p._polynome.find(i.first) == p._polynome.end() || this->_polynome[i.first] != p._polynome.at(i.first)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+
+Polymerization Polymerization::derivative() {
     poly_type res;
     for (auto i : this->_polynome) {
         if (i.first != 0) {
@@ -147,10 +233,32 @@ convivae::Polymerization convivae::Polymerization::derivative() {
     return Polymerization(res);
 }
 
-convivae::Polymerization convivae::Polymerization::second_derivative() {
+Polymerization Polymerization::second_derivative() {
     return this->derivative().derivative();
 }
 
-convivae::Polymerization convivae::Polymerization::third_derivative() {
+Polymerization Polymerization::third_derivative() {
     return this->second_derivative().derivative();
 }
+
+double Polymerization::value_at_point(double x) {
+    double res = 0;
+    for (auto i : this->_polynome) {
+        res += i.second * pow(x, i.first);
+    }
+    return res;
+}
+
+Polymerization operator+(double n, Polymerization p) {
+    return p + n;
+}
+
+Polymerization operator-(const double n, const Polymerization &p) {
+    return Polymerization(std::to_string(n)) - p;
+}
+
+Polymerization operator*(const double n, Polymerization p) {
+    return p * n;
+}
+
+

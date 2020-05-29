@@ -13,46 +13,73 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 
 using std::map;
 using std::string;
 using std::stringstream;
+using std::make_pair;
 
-namespace convivae {
-    class Polymerization {
-    private:
-        typedef map<int, double> poly_type;
 
-        poly_type _polynome;
+class Polymerization {
+private:
+    typedef map<int, double> poly_type;
 
-        void read_from_string(const string &s);
+    poly_type _polynome;
 
-        explicit Polymerization(map<int, double> p) : _polynome(std::move(p)) {}
+    void read_from_string(const string &s);
 
-    public:
-        explicit Polymerization(const string &s) {
-            read_from_string(s);
-        }
+    explicit Polymerization(map<int, double> p) : _polynome(std::move(p)) {
+    }
 
-        static string to_string(const poly_type &p);
+public:
+    explicit Polymerization(const string &s) {
+        read_from_string(s);
+    }
 
-        Polymerization operator+(const Polymerization &p);
+    string to_string();
 
-        Polymerization operator-(const Polymerization &p);
+    double value_at_point(double x);
 
-        Polymerization operator*(const Polymerization &p);
+    Polymerization operator+(const Polymerization &p);
 
-        // 求一阶导数
-        Polymerization derivative();
+    Polymerization operator+(double n);
 
-        // 二阶导数
-        Polymerization second_derivative();
+    friend Polymerization operator+(double n, Polymerization p);
 
-        // 三阶导数
-        Polymerization third_derivative();
-    };
+    Polymerization operator-(const Polymerization &p);
 
-}
+    Polymerization operator-(double n);
+
+    friend Polymerization operator-(double n, const Polymerization &p);
+
+    Polymerization operator*(const Polymerization &p);
+
+    Polymerization operator*(double n);
+
+    friend Polymerization operator*(double n, Polymerization p);
+
+
+    auto operator=(const Polymerization &p) -> Polymerization &;
+
+    Polymerization &operator+=(const Polymerization &p);
+
+    Polymerization &operator-=(const Polymerization &p);
+
+    Polymerization &operator*=(const Polymerization &p);
+
+    bool operator==(const Polymerization &p);
+
+
+    // 求一阶导数
+    Polymerization derivative();
+
+    // 二阶导数
+    Polymerization second_derivative();
+
+    // 三阶导数
+    Polymerization third_derivative();
+};
 
 
 #endif //NUMERICALANALYSIS_POLYMERIZATION_H

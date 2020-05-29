@@ -9,7 +9,7 @@ void convivae::NonlinearEquations::draw_dividing_line() {
 }
 
 void convivae::NonlinearEquations::dichotomy_method(const pFun fun, double left, double right, double epsilon,
-                                                    bool show_details, int max_steps) const {
+                                                    bool show_details, int max_steps) {
     std::cout << "二分法" << std::endl;
     auto k = 0;
     auto mid = 0.0;
@@ -56,7 +56,7 @@ void convivae::NonlinearEquations::dichotomy_method(const pFun fun, double left,
 
 void
 convivae::NonlinearEquations::simple_iteration_method(convivae::NonlinearEquations::pFun fun, double x0, double eta,
-                                                      bool show_details, int max_steps) const {
+                                                      bool show_details, int max_steps) {
     std::cout << "简单迭代法" << std::endl;
     auto k = 0;
     auto xk = x0;
@@ -88,7 +88,7 @@ convivae::NonlinearEquations::simple_iteration_method(convivae::NonlinearEquatio
 
 void
 convivae::NonlinearEquations::Steffensen_iteration_method(convivae::NonlinearEquations::pFun fun, double x0, double eta,
-                                                          bool show_details, int max_steps) const {
+                                                          bool show_details, int max_steps) {
     std::cout << "Steffensen 迭代法" << std::endl;
     auto k = 0;
     auto xk = x0;
@@ -121,7 +121,7 @@ convivae::NonlinearEquations::Steffensen_iteration_method(convivae::NonlinearEqu
 void convivae::NonlinearEquations::Newton_iteration_method(convivae::NonlinearEquations::pFun fun,
                                                            convivae::NonlinearEquations::pFun fun_1, double eta,
                                                            double x0, bool show_details, bool down_hill,
-                                                           int max_steps) const {
+                                                           int max_steps) {
     // 下山法确定初始值
     if (down_hill) {
         auto lambda = 1.0;
@@ -162,7 +162,7 @@ void convivae::NonlinearEquations::Newton_iteration_method(convivae::NonlinearEq
 }
 
 void convivae::NonlinearEquations::secant_iteration_method(convivae::NonlinearEquations::pFun fun, double x0, double x1,
-                                                           double eta, bool show_details, int max_steps) const {
+                                                           double eta, bool show_details, int max_steps) {
     std::cout << "割线法" << std::endl;
     auto k = 1;
     auto xk = x0;
@@ -194,7 +194,7 @@ void convivae::NonlinearEquations::secant_iteration_method(convivae::NonlinearEq
 
 void convivae::NonlinearEquations::secant_with_single_point_iteration_method(convivae::NonlinearEquations::pFun fun,
                                                                              double x0, double x1, double eta,
-                                                                             bool show_details, int max_steps) const {
+                                                                             bool show_details, int max_steps) {
     std::cout << "单点割线法" << std::endl;
     auto k = 1;
     auto xk = x0, f_x0 = fun(x0);
@@ -226,7 +226,7 @@ void convivae::NonlinearEquations::secant_with_single_point_iteration_method(con
 void convivae::NonlinearEquations::simple_iteration_equations_method(convivae::NonlinearEquations::ppFun fun1,
                                                                      convivae::NonlinearEquations::ppFun fun2,
                                                                      double x1_0, double x2_0, double eta,
-                                                                     bool show_details, int max_steps) const {
+                                                                     bool show_details, int max_steps) {
     std::cout << "非线性方程组的简单迭代法" << std::endl;
     auto k = 0;
 
@@ -265,7 +265,7 @@ void convivae::NonlinearEquations::simple_iteration_equations_method(convivae::N
 void convivae::NonlinearEquations::Newton_iteration_equations_method(convivae::NonlinearEquations::ppFun fun1,
                                                                      convivae::NonlinearEquations::ppFun fun2,
                                                                      double x1_0, double x2_0, double eta,
-                                                                     bool show_details, int max_steps) const {
+                                                                     bool show_details, int max_steps) {
     std::cout << "非线性方程组的 Newton 迭代法" << std::endl;
     auto k = 0;
 

@@ -34,8 +34,8 @@ namespace convivae {
          * @param epsilon 迭代精度
          * @param max_steps 最大迭代次数
          */
-        void dichotomy_method(pFun fun, double left, double right, double epsilon = 1e-6, bool show_details = false,
-                              int max_steps = 2000) const;
+        static void dichotomy_method(pFun fun, double left, double right, double epsilon = 1e-6, bool show_details = false,
+                              int max_steps = 2000) ;
 
         /**
          * 简单迭代法
@@ -45,8 +45,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void simple_iteration_method(pFun fun, double x0, double eta = 1e-6, bool show_details = false,
-                                     int max_steps = 2000) const;
+        static void simple_iteration_method(pFun fun, double x0, double eta = 1e-6, bool show_details = false,
+                                     int max_steps = 2000) ;
 
 
         /**
@@ -57,8 +57,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void Steffensen_iteration_method(pFun fun, double x0, double eta = 1e-6, bool show_details = false,
-                                         int max_steps = 2000) const;
+        static void Steffensen_iteration_method(pFun fun, double x0, double eta = 1e-6, bool show_details = false,
+                                         int max_steps = 2000) ;
 
 
         /**
@@ -72,8 +72,8 @@ namespace convivae {
          * @param down_hill 是否采用下山法，若选定的初始值不收敛可以选择开启
          * @param max_steps
          */
-        void Newton_iteration_method(pFun fun, pFun fun_1, double eta = 1e-6, double x0 = 0, bool show_details = false,
-                                     bool down_hill = false, int max_steps = 2000) const;
+        static void Newton_iteration_method(pFun fun, pFun fun_1, double eta = 1e-6, double x0 = 0, bool show_details = false,
+                                     bool down_hill = false, int max_steps = 2000) ;
 
         /**
          * 割线法
@@ -85,8 +85,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void secant_iteration_method(pFun fun, double x0, double x1, double eta = 1e-6, bool show_details = false,
-                                     int max_steps = 2000) const;
+        static void secant_iteration_method(pFun fun, double x0, double x1, double eta = 1e-6, bool show_details = false,
+                                     int max_steps = 2000) ;
 
         /**
          * 单点割线法
@@ -98,8 +98,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void secant_with_single_point_iteration_method(pFun fun, double x0, double x1, double eta = 1e-6,
-                                                       bool show_details = false, int max_steps = 2000) const;
+        static void secant_with_single_point_iteration_method(pFun fun, double x0, double x1, double eta = 1e-6,
+                                                       bool show_details = false, int max_steps = 2000) ;
 
         /**
          * 非线性方程组的简单迭代法（仅针对两个未知数）
@@ -112,8 +112,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void simple_iteration_equations_method(ppFun fun1, ppFun fun2, double x1_0, double x2_0, double eta = 1e-6,
-                                               bool show_details = false, int max_steps = 2000) const;
+        static void simple_iteration_equations_method(ppFun fun1, ppFun fun2, double x1_0, double x2_0, double eta = 1e-6,
+                                               bool show_details = false, int max_steps = 2000) ;
 
         /**
          * 非线性方程组的 Newton 迭代法（仅针对两个未知数）
@@ -126,8 +126,8 @@ namespace convivae {
          * @param show_details
          * @param max_steps
          */
-        void Newton_iteration_equations_method(ppFun fun1, ppFun fun2, double x1_0, double x2_0, double eta = 1e-6,
-                                               bool show_details = false, int max_steps = 2000) const;
+        static void Newton_iteration_equations_method(ppFun fun1, ppFun fun2, double x1_0, double x2_0, double eta = 1e-6,
+                                               bool show_details = false, int max_steps = 2000) ;
     };
 }
 

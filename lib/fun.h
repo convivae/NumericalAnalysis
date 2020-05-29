@@ -5,6 +5,7 @@
 
 #ifndef NUMERICALANALYSIS_FUN_H
 #define NUMERICALANALYSIS_FUN_H
+
 #include "../Type/Type.h"
 
 //二分法的迭代函数
@@ -66,6 +67,31 @@ double fun_equations_Newton2(double x, double y) {
     auto f = y + cos(x + y) - 0.5;
 
     return y + (f / c - e / a) / (b / a - d / c);
+}
+
+// Romberg 积分法的原函数
+double fun_Romberg(double x) {
+    return pow(M_E, -x * x);
+}
+
+// Gauss_Legendre 积分法的原函数
+double fun_Gauss_Legendre(double x) {
+    return pow(M_E, (-x - 3) / 2) / ((x + 3) / 2);
+}
+
+// Gauss_Lagueree 积分法的原函数
+double fun_Gauss_Lagueree(double x) {
+    return pow(M_E, -x) * sqrt(x);
+}
+
+// Gauss_Hermite 积分法的原函数
+double fun_Gauss_Hermite(double x) {
+    return pow(M_E, -x * x) * cos(x);
+}
+
+// Gauss_Chebyshev 积分法的原函数
+double fun_Gauss_Chebyshev(double x) {
+    return sqrt((2 + x) / (1.0 - x * x));
 }
 
 #endif //NUMERICALANALYSIS_FUN_H
