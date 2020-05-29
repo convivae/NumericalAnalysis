@@ -16,7 +16,7 @@ int main(int argc, char *argv[], char *env[]) {
 //    auto test02 = LinearEquations<f8>("../2.txt");
 //
 //    // 高斯消元
-//    test02.Gaussian_elimination_with_partial_pivoting_method();
+//    test02.Gaussian_elimination_with_partial_pivoting_method(false);
 //    test02.Gauss_Jordan_elimination();
 //
 //    // 三角分解法
@@ -76,23 +76,26 @@ int main(int argc, char *argv[], char *env[]) {
     auto test05 = new InterpolationAndApproximation("../5.txt");
     test05->Lagrange_polynomial(4);
     test05->Newton_polynomial(4);
-
-
-
-    cout << OrthogonalPolynomial::Legendre_orthogonal_polynomial(3).to_string() << endl;
-    cout << OrthogonalPolynomial::Chebyshev_orthogonal_polynomial(3).to_string() << endl;
-    cout << OrthogonalPolynomial::Laguerre_orthogonal_polynomial(3).to_string() << endl;
-    cout << OrthogonalPolynomial::Hermite_orthogonal_polynomial(3).to_string() << endl;
-
-    /**
-     * 第六章 数值积分
-     */
-    auto test06 = new NumericalIntegration();
-    test06->Romberg_numerical_integration_method(fun_Romberg, 0, 1, 1e-4);
-    test06->Gauss_Legendre_integration_method(fun_Gauss_Legendre, 4, -0.8611363116, 0.8611363116, -0.3399810436,
-                                              0.3399810436);
-    test06->Gauss_Laguerre_integration_method(fun_Gauss_Lagueree, 3, 0.4157745568, 2.2942803603, 6.2899450829);
-    test06->Gauss_Hermite_integration_method(fun_Gauss_Hermite, 5, 0.0, -2.0201828705, 2.0201828705, -0.9585724646,
-                                             0.9585724646);
-    test06->Gauss_Chebyshev_integration_method(fun_Gauss_Chebyshev, 3, -0.866025403, 0.0, 0.866025403);
+    test05->three_moment_method_bound1(0, 0, true);
+    test05->three_moment_method_bound2(-1, 2);
+    test05->three_moment_method_bound3(false);
+//
+//
+//
+//    cout << OrthogonalPolynomial::Legendre_orthogonal_polynomial(3).to_string() << endl;
+//    cout << OrthogonalPolynomial::Chebyshev_orthogonal_polynomial(3).to_string() << endl;
+//    cout << OrthogonalPolynomial::Laguerre_orthogonal_polynomial(3).to_string() << endl;
+//    cout << OrthogonalPolynomial::Hermite_orthogonal_polynomial(3).to_string() << endl;
+//
+//    /**
+//     * 第六章 数值积分
+//     */
+//    auto test06 = new NumericalIntegration();
+//    test06->Romberg_numerical_integration_method(fun_Romberg, 0, 1, 1e-4);
+//    test06->Gauss_Legendre_integration_method(fun_Gauss_Legendre, 4, -0.8611363116, 0.8611363116, -0.3399810436,
+//                                              0.3399810436);
+//    test06->Gauss_Laguerre_integration_method(fun_Gauss_Lagueree, 3, 0.4157745568, 2.2942803603, 6.2899450829);
+//    test06->Gauss_Hermite_integration_method(fun_Gauss_Hermite, 5, 0.0, -2.0201828705, 2.0201828705, -0.9585724646,
+//                                             0.9585724646);
+//    test06->Gauss_Chebyshev_integration_method(fun_Gauss_Chebyshev, 3, -0.866025403, 0.0, 0.866025403);
 }

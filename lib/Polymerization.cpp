@@ -9,7 +9,7 @@ void Polymerization::read_from_string(const string &s) {
 
     size_t begin = 0;
     for (auto i = 1; i < s.size(); ++i) {
-        if ((s[i] == '+' || s[i] == '-') && s[i - 1] != '^') {
+        if ((s[i] == '+' || s[i] == '-') && s[i - 1] != '^' && s[i-1] != 'e') {
             poly.push_back(s.substr(begin, i - begin));
             begin = i;
         }

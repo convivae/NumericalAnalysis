@@ -8,6 +8,7 @@
 #define NUMERICALANALYSIS_INTERPOLATIONANDAPPROXIMATION_H
 
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -20,6 +21,9 @@ using namespace std;
 namespace convivae {
     class InterpolationAndApproximation {
     private:
+        typedef std::vector<std::vector<double>> mat_type;
+        typedef std::vector<double> vec_type;
+
         i4 _n{};
         bool _initialized;
         std::string _rdr;
@@ -42,6 +46,10 @@ namespace convivae {
                               vector<vector<bool>> &flag);
 
         static void draw_dividing_line();
+
+        static void print_vec(const string &s, vector<double> v, int start_pos = 0);
+
+        static void print_mat(const string &s, vector<vector<double>> v);
 
         void read_data();
 
@@ -66,6 +74,34 @@ namespace convivae {
         /**
          * 正交多项式位于 lib/OrthogonalPolynomial.h
          */
+
+        /**
+         * 三次样条函数的三弯矩法
+         * 第一种边界条件（给定两边界节点的二阶导数）
+         * @param f2_0 f''(x_0)
+         * @param f2_n f''(x_n)
+         * @param simplify 是否显示简化的多项式
+         * @return
+         */
+        void three_moment_method_bound1(double f2_0, double f2_n, bool simplify = false);
+
+        /**
+         * 三次样条函数的三弯矩法
+         * 第二种边界条件（给定两边界节点的一阶导数）
+         * @param f2_0 f'(x_0)
+         * @param f2_n f'(x_n)
+         * @param simplify 是否显示简化的多项式
+         * @return
+         */
+        void three_moment_method_bound2(double f1_0, double f1_n, bool simplify = false);
+
+        /**
+         * 三次样条函数的三弯矩法
+         * 第三种边界条件（s'(x_0+) = s'(x_n-), s''(x_0+) = s''(x_n-)）
+         * @param simplify 是否显示简化的多项式
+         * @return
+         */
+        void three_moment_method_bound3(bool simplify = false);
     };
 }
 
