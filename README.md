@@ -89,7 +89,7 @@
 
 ## 第五章 插值与逼近
 
-> input: “../5.txt”，共两行， $X_i$ 和 $Y_i$
+> input: “../5.txt”，共两行， $$ X_i $$  和 $$ Y_i $$
 
 * [x] Lagrange 插值
 * [x] Newton 插值
