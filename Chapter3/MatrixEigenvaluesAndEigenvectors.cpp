@@ -56,7 +56,7 @@ convivae::MatrixEigenvaluesAndEigenvectors::power_method(double epsilon, bool sh
     mat_type a(_original_mat);
 
     //选取 v0 != 0
-    vec_type v0(n,1.0);
+    vec_type v0(n, 1.0);
     //v0[n - 1] = 1.0;
     vec_type v(v0);
 
@@ -404,6 +404,148 @@ void convivae::MatrixEigenvaluesAndEigenvectors::Jacobi_method(double epsilon, b
             std::cout << res_U[i][j] << ",";
         std::cout << res_U[n - 1][j] << ")" << std::endl;
     }
+    draw_dividing_line();
+}
+
+void convivae::MatrixEigenvaluesAndEigenvectors::cal_Householder_matrix_Hessenberg(bool show_details) {
+    std::cout << "计算初等反射矩阵（Householder 矩阵）使 A 化为拟上三角矩阵" << std::endl;
+    if (!_initialized)
+        read_mat();
+
+    i4 n = _dimension;
+    mat_type A(_original_mat);
+    mat_type I = MatrixOperation<f8>::identity_matrix(n);
+    mat_type H(I);
+
+    if (show_details)
+        print_mat("start: A =", A);
+
+    vec_type s(n);
+    for (auto i = 0; i < n - 2; ++i) {
+        //1. s
+        s[i] = 0.0;
+        for (auto j = i + 1; j < n; ++j)
+            s[j] = A[j][i];
+
+        if (show_details) {
+            std::cout << "s = (";
+            for (auto index = 0; index < n - 1; ++index)
+                std::cout << s[index] << ",";
+            std::cout << s[n - 1] << ")" << std::endl;
+        }
+
+        //2. c
+        auto c = MatrixOperation<f8>::matrix_multiply(s, MatrixOperation<f8>::matrix_transposition(s));
+        auto sign = s[i + 1] > 0.0 ? -1.0 : 1.0;
+        c = sqrt(c) * sign;
+
+        if (show_details)
+            std::cout << "c = " << c << std::endl;
+
+        //3. u
+        vec_type u(s);
+        u[i + 1] -= c;
+
+        if (show_details) {
+            std::cout << "u = (";
+            for (auto index = 0; index < n - 1; ++index)
+                std::cout << u[index] << ",";
+            std::cout << u[n - 1] << ")" << std::endl;
+        }
+
+        //4. H
+        auto u_value = MatrixOperation<f8>::matrix_multiply(u, MatrixOperation<f8>::matrix_transposition(u));
+        H = MatrixOperation<f8>::matrix_multiply(MatrixOperation<f8>::matrix_transposition(u), u);
+        H = MatrixOperation<f8>::matrix_multiply(H, 2.0 / u_value);
+        H = MatrixOperation<f8>::matrix_sub(I, H);
+
+        A = MatrixOperation<f8>::matrix_multiply(H, A);
+        A = MatrixOperation<f8>::matrix_multiply(A, H);
+
+        if (show_details) {
+            std::cout << "\n第" << i + 1 << "次迭代计算可得: ";
+            print_mat("H =", H);
+            print_mat("A =", A);
+        }
+    }
+
+    std::cout << "\n最终结果为: ";
+    print_mat("H =", H);
+    print_mat("A =", A);
+
+    draw_dividing_line();
+}
+
+void convivae::MatrixEigenvaluesAndEigenvectors::cal_Householder_matrix_normal(bool show_details) {
+    std::cout << "计算初等反射矩阵（Householder 矩阵）使 A 化为上三角矩阵" << std::endl;
+    if (!_initialized)
+        read_mat();
+
+    i4 n = _dimension;
+    mat_type A(_original_mat);
+    mat_type I = MatrixOperation<f8>::identity_matrix(n);
+    mat_type H(I), Q(I);
+
+    if (show_details)
+        print_mat("start: A =", A);
+
+    vec_type s(n);
+    for (auto i = 0; i < n - 1; ++i) {
+        //1. s
+        for (auto j = i; j < n; ++j)
+            s[j] = A[j][i];
+
+        if (show_details) {
+            std::cout << "s = (";
+            for (auto index = 0; index < n - 1; ++index)
+                std::cout << s[index] << ",";
+            std::cout << s[n - 1] << ")" << std::endl;
+        }
+
+        //2. c
+        auto c = MatrixOperation<f8>::matrix_multiply(s, MatrixOperation<f8>::matrix_transposition(s));
+        auto sign = s[i] > 0.0 ? -1.0 : 1.0;
+        c = sqrt(c) * sign;
+
+        if (show_details)
+            std::cout << "c = " << c << std::endl;
+
+        //3. u
+        vec_type u(s);
+        u[i] -= c;
+
+        if (show_details) {
+            std::cout << "u = (";
+            for (auto index = 0; index < n - 1; ++index)
+                std::cout << u[index] << ",";
+            std::cout << u[n - 1] << ")" << std::endl;
+        }
+
+        //4. H
+        auto u_value = MatrixOperation<f8>::matrix_multiply(u, MatrixOperation<f8>::matrix_transposition(u));
+        H = MatrixOperation<f8>::matrix_multiply(MatrixOperation<f8>::matrix_transposition(u), u);
+        H = MatrixOperation<f8>::matrix_multiply(H, 2.0 / u_value);
+        H = MatrixOperation<f8>::matrix_sub(I, H);
+
+        Q = MatrixOperation<f8>::matrix_multiply(Q, H);
+
+        A = MatrixOperation<f8>::matrix_multiply(H, A);
+
+        if (show_details) {
+            std::cout << "\n第" << i + 1 << "次迭代计算可得: ";
+            print_mat("H =", H);
+            print_mat("A =", A);
+        }
+
+        s[i] = 0.0;
+    }
+
+    std::cout << "\n最终结果为: ";
+    print_mat("H =", H);
+    print_mat("Q = ", Q);
+    print_mat("R = A_n =", A);
+    print_mat("验证：A = Q * R =", MatrixOperation<f8>::matrix_multiply(Q, A));
+
     draw_dividing_line();
 }
 
@@ -910,3 +1052,5 @@ void convivae::MatrixEigenvaluesAndEigenvectors::QR_method_with_two_steps_shifte
     }
     draw_dividing_line();
 }
+
+

@@ -90,6 +90,25 @@ namespace convivae {
          */
         void Jacobi_method(double epsilon = 1e-5, bool show_details = false);
 
+        /**
+         * 计算初等反射矩阵（Householder 矩阵）
+         * 使得将任意矩阵 A 正交相似约化为拟上三角矩阵（Hessenberg 矩阵）
+         * 拟上三角矩阵相比于上三角矩阵，不要求次对角线元素为 0
+         * A^(n-1) = H * A^(n-2) * H
+         * 当 A 是实对称矩阵时，A^(n-1) 也是实对称矩阵，故 A^(n-1) 是对称三对角矩阵
+         * @param show_details
+         */
+        void cal_Householder_matrix_Hessenberg(bool show_details = false);
+
+        /**
+         * 计算初等反射矩阵（Householder 矩阵）
+         * 使得将任意矩阵 A 正交相似约化为上三角矩阵（注意不是 拟上三角矩阵(Hessenberg 矩阵)）
+         * 上三角矩阵相比于拟上三角矩阵，还要求次对角线元素为 0
+         * A^n(n-1) = H * A^(n-2) * H
+         * @param show_details
+         */
+        void cal_Householder_matrix_normal(bool show_details = false);
+
 
         /**
          * 利用 Householder 矩阵（镜面映射矩阵）对矩阵 A 做 QR 分解
