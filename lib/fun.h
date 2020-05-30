@@ -15,7 +15,7 @@ double fun_dichotomy(double x) {
 
 //简单迭代法的迭代函数
 double fun_simple(double x) {
-    return 2 * acos(sqrt((pow(M_E, -x) + 1) / 2));
+    return 1.0 / (1.0 + x);
 }
 
 //Steffensen 法迭代函数
@@ -25,7 +25,7 @@ double fun_Steffensen(double x) {
 
 //Newton 法迭代函数
 double fun_Newton(double x) {
-    return x + sin(x) - 1;
+    return pow(1 + x * x, 1 / 3);
 }
 
 double fun_Newton_1(double x) {
@@ -76,7 +76,7 @@ double fun_Romberg(double x) {
 
 // Gauss_Legendre 积分法的原函数
 double fun_Gauss_Legendre(double x) {
-    return pow(M_E, (-x - 3) / 2) / ((x + 3) / 2);
+    return 1 / (x+2);
 }
 
 // Gauss_Lagueree 积分法的原函数

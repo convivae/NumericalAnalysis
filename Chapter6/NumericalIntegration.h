@@ -32,7 +32,7 @@ private:
     /**
      * 阶乘
      * @param n
-     * @return
+     * @return n!
      */
     double my_fac(int n);
 

@@ -56,8 +56,8 @@ convivae::MatrixEigenvaluesAndEigenvectors::power_method(double epsilon, bool sh
     mat_type a(_original_mat);
 
     //选取 v0 != 0
-    vec_type v0(n);
-    v0[n - 1] = 1.0;
+    vec_type v0(n,1.0);
+    //v0[n - 1] = 1.0;
     vec_type v(v0);
 
     //迭代
